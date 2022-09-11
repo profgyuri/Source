@@ -54,4 +54,15 @@ public static class ListExtensions
             list.Remove(items[i]);
         }
     }
+    
+    /// <summary>
+    /// Gets a random item from the collection.
+    /// </summary>
+    /// <typeparam name="T">The type of the collection.</typeparam>
+    /// <param name="list">The collection to get the random item from.</param>
+    /// <returns>The random item.</returns>
+    public static T GetRandom<T>(this IList<T> list)
+    {
+        return list[RandomNumberGenerator.GetInt32(list.Count)];
+    }
 }
