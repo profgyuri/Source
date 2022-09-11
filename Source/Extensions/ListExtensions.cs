@@ -35,9 +35,23 @@ public static class ListExtensions
     /// <param name="items">The items to add to the collection.</param>
     public static void AddRange<T>(this IList<T> list, IList<T> items)
     {
-        for (int i = 0; i < items.Count; i++)
+        for (var i = 0; i < items.Count; i++)
         {
             list.Add(items[i]);
+        }
+    }
+    
+    /// <summary>
+    /// Removes the range of items from the collection.
+    /// </summary>
+    /// <typeparam name="T">The type of the collection.</typeparam>
+    /// <param name="list">The collection to remove the items from.</param>
+    /// <param name="items">The items to remove from the collection.</param>
+    public static void RemoveRange<T>(this IList<T> list, IList<T> items)
+    {
+        for (var i = 0; i < items.Count; i++)
+        {
+            list.Remove(items[i]);
         }
     }
 }
