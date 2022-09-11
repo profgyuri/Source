@@ -1,5 +1,9 @@
 ﻿namespace Source.Storage;
 
+/// <summary>
+/// Represents a storage provider.
+/// </summary>
+/// <typeparam name="T">The type of the settings to store.</typeparam>
 public interface ISettingsManager<out T> 
     where T: Settings
 {
