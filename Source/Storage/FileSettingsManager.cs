@@ -7,7 +7,7 @@ namespace Source.Storage;
 /// </summary>
 /// <typeparam name="T">The type of the settings.</typeparam>
 public class FileSettingsManager<T> : ISettingsManager<T> 
-    where T: Settings
+    where T: Settings, new()
 {
     private const string SettingsFileName = "settings.json";
     
@@ -15,15 +15,14 @@ public class FileSettingsManager<T> : ISettingsManager<T>
 
     public FileSettingsManager()
     {
-        try
+        if (File.Exists(SettingsFileName))
         {
             LoadSettings();
+            return;
         }
-        catch (FileNotFoundException e)
-        {
-            // If the settings file does not exist, create a new one.
-            SaveSettings();
-        }
+        
+        // If the settings file does not exist, create a new one.
+        SaveSettings(_ => { });
     }
     
     #region Implementation of ISettingsManager<out T>
@@ -34,9 +33,7 @@ public class FileSettingsManager<T> : ISettingsManager<T>
     /// <exception cref="ArgumentNullException"><paramref name="settings"/> is <see langword="null"/>.</exception>
     public void SaveSettings(Action<T>? settings = null)
     {
-        ArgumentNullException.ThrowIfNull(_settings);
-        
-        settings?.Invoke(_settings);
+        settings?.Invoke(_settings ??= new T());
         
         var text = JsonConvert.SerializeObject(_settings);
         File.WriteAllText(SettingsFileName, text);
