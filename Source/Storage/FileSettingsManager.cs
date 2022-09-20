@@ -6,7 +6,7 @@ namespace Source.Storage;
 /// Responsible to save the specified settings to a file in .json format.
 /// </summary>
 /// <typeparam name="T">The type of the settings.</typeparam>
-public class FileSettingsManager<T> : ISettingsManager<T> 
+public sealed class FileSettingsManager<T> : ISettingsManager<T> 
     where T: Settings, new()
 {
     private const string SettingsFileName = "settings.json";
