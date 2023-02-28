@@ -36,7 +36,10 @@ public sealed class KeyboardHook : IDisposable
         }
     }
 
-    private IntPtr LowLevelKeyboardProc(int nCode, IntPtr wParam, IntPtr lParam)
+    private IntPtr LowLevelKeyboardProc(
+        int nCode,
+        IntPtr wParam,
+        IntPtr lParam)
     {
         var fEatKeyStroke = false;
 
@@ -44,7 +47,7 @@ public sealed class KeyboardHook : IDisposable
         if (!Enum.IsDefined(typeof(KeyboardState), wparamTyped))
         {
             return fEatKeyStroke
-                ? (IntPtr)1
+                ? (IntPtr) 1
                 : CallNextHookEx(IntPtr.Zero, nCode, wParam,
                     lParam);
         }
@@ -52,16 +55,16 @@ public sealed class KeyboardHook : IDisposable
         var o = Marshal.PtrToStructure(lParam, typeof(KeycodeInterpreter));
         var p = o is null
             ? throw new NullReferenceException("Object cannot be null!")
-            : (KeycodeInterpreter)o;
+            : (KeycodeInterpreter) o;
 
-        var eventArguments = new KeyboardHookEventArgs(p, (KeyboardState)wparamTyped);
+        var eventArguments = new KeyboardHookEventArgs(p, (KeyboardState) wparamTyped);
 
-        var key = (ConsoleKey)p.VirtualCode;
+        var key = (ConsoleKey) p.VirtualCode;
         //If the constructor gets null, the program can become a keylogger!!!
         if (_registeredKeys?.Contains(key) == false)
         {
             return fEatKeyStroke
-                ? (IntPtr)1
+                ? (IntPtr) 1
                 : CallNextHookEx(IntPtr.Zero, nCode, wParam,
                     lParam);
         }
@@ -72,12 +75,15 @@ public sealed class KeyboardHook : IDisposable
         fEatKeyStroke = eventArguments.Handled;
 
         return fEatKeyStroke
-            ? (IntPtr)1
+            ? (IntPtr) 1
             : CallNextHookEx(IntPtr.Zero, nCode, wParam,
                 lParam);
     }
 
-    private delegate IntPtr HookProc(int nCode, IntPtr wParam, IntPtr lParam);
+    private delegate IntPtr HookProc(
+        int nCode,
+        IntPtr wParam,
+        IntPtr lParam);
 
     #region Variables and constants
     private IntPtr _windowsHookHandle;
@@ -155,7 +161,10 @@ public sealed class KeyboardHook : IDisposable
     /// <param name="dwThreadId">thread identifier</param>
     /// <returns>If the function succeeds, the return value is the handle to the hook procedure.</returns>
     [DllImport("USER32", SetLastError = true)]
-    private static extern IntPtr SetWindowsHookEx(int idHook, HookProc lpfn, IntPtr hMod,
+    private static extern IntPtr SetWindowsHookEx(
+        int idHook,
+        HookProc lpfn,
+        IntPtr hMod,
         int dwThreadId);
 
     /// <summary>
@@ -177,7 +186,10 @@ public sealed class KeyboardHook : IDisposable
     /// <param name="lParam">value passed to hook procedure</param>
     /// <returns>If the function succeeds, the return value is true.</returns>
     [DllImport("USER32", SetLastError = true)]
-    private static extern IntPtr CallNextHookEx(IntPtr hHook, int code, IntPtr wParam,
+    private static extern IntPtr CallNextHookEx(
+        IntPtr hHook,
+        int code,
+        IntPtr wParam,
         IntPtr lParam);
     #endregion
 }
